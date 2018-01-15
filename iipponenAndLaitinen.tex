@@ -1,0 +1,210 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                
+%%      SWSC LaTeX class for Journal of Space Weather and Space Climate
+%%      
+%%                                      (c) Springer-Verlag HD
+%%                                      revised by EDP Sciences
+%%                                      further revised by J. Watermann 
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%      This demonstration file was derived from aa.dem
+%%  
+%%      AA vers. 7.0, LaTeX class for Astronomy & Astrophysics
+%%      demonstration file
+%%                                                (c) Springer-Verlag HD
+%%                                                revised by EDP Sciences
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%      modified for Journal of Space Weather and Space Climate
+%%      by Jurgen Watermann, Editorial Advisor to SWSC
+%%
+%%      01-04-2012 original version
+%%      02-04-2012 revision 1
+%%      12-07-2012 revision 2
+%%      06-12-2012 revision 3 
+%%      01-01-2014 revision 4
+%%      05-03-2016 revision 5
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%      The two sub-figures referenced in this template are of eps and png type,
+%%      respectively, in order to demonstrate the usepackages subfigure and
+%%      epstopdf and thus create pdf-only output 
+%%
+%%      If you want to use TexLive or MikTex together with a bibtex bibliography 
+%%      file you may run Latex2e from the command line 
+%%          pdflatex -shell-escape swsc.tex
+%%          bibtex swsc (do not include an extension such as .tex or .bib)
+%%          pdflatex -shell-escape swsc.tex
+%%          pdflatex -shell-escape swsc.tex
+%%
+%%      A double call to pdflatex after calling bibtex is necessary in order to
+%%      set citations and references correctly and insure that foreward/backward  
+%%      linkage (backref option) is properly applied
+%%      If you use MikTex you may need to make a triple call to pdflatex
+%%
+%%      If you are using TexLive or MikTex but not a bibtex type of bibliography
+%%      you may simply run Latex2e twice from the command line 
+%%          pdflatex -shell-escape swsc.tex
+%%          pdflatex -shell-escape swsc.tex
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%   single column 12-point version for review
+%%
+
+%%  with traditional abstract
+\documentclass[referee,a4paper,12pt,traditabstract]{swsc} 
+
+%%  with structured abstract 
+%\documentclass[referee,a4paper,12pt,structabstract]{swsc} 
+
+\usepackage{graphicx}
+\usepackage{txfonts}
+\usepackage{subfigure}
+\usepackage{epstopdf}
+\usepackage{lineno}
+\usepackage[authoryear,round]{natbib}
+\usepackage[backref]{hyperref}
+\usepackage{url}
+
+%%    This version assumes using bibtex with the swsc bibliography style file
+\bibliographystyle{swsc}
+
+\hypersetup{colorlinks=true,citecolor=cyan,urlcolor=cyan,linkcolor=blue}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\begin{linenumbers}
+
+   \title{Iipponen-Laitinen 2017 model}
+
+   %\subtitle{I. Overviewing the $\kappa$-mechanism}
+   
+   \titlerunning{Iipponen-Laitinen model}
+
+   \authorrunning{Iipponen and Laitinen}
+
+   \author{J. Iipponen
+          \inst{1}
+          \and
+          T. Laitinen\inst{1}\fnmsep
+          }
+
+   \institute{Finnish Meteorological Institute,
+              Helsinki, Finland\\
+              \email{\href{mailto:iipponen@princeton.edu}{iipponen@princeton.edu}}
+         \and
+             University of Helsinki, Department of Physics, Helsinki, Finland
+             }
+
+%%   \date{Received September 15, 1996; accepted March 16, 1997}
+
+  % \abstract{}{}{}{}{}        %% uncomment if structured abstract is desired
+ %% 5 {} token are mandatory
+ 
+  \abstract
+ %% context heading (optional). leave {} empty if necessary  
+   {To investigate the physical nature of the `nuc\-leated instability' of
+   proto giant planets, the stability of layers
+   in static, radiative gas spheres is analysed on the basis of Baker's
+   standard one-zone model.
+   %}        %% uncomment if structured abstract is selected
+ %% aims heading (mandatory)
+   %{        %% uncomment if structured abstract is selected
+   It is shown that stability
+   depends only upon the equations of state, the opacities and the local
+   thermodynamic state in the layer. Stability and instability can
+   therefore be expressed in the form of stability equations of state
+   which are universal for a given composition.
+   %}        %% uncomment if structured abstract is selected
+ %% methods heading (mandatory)
+   %{        %% uncomment if structured abstract is selected
+   The stability equations of state are
+   calculated for solar composition and are displayed in the domain
+   $-14 \leq \lg \rho / \mathrm{[g\, cm^{-3}]} \leq 0 $,
+   $ 8.8 \leq \lg e / \mathrm{[erg\, g^{-1}]} \leq 17.7$. These displays
+   may be used to determine the one-zone stability of layers in stellar
+   or planetary structure models by directly reading off the value of
+   the stability equations for the thermodynamic state of these layers,
+   specified by state quantities as density $\rho$, temperature $T$ or
+   specific internal energy $e$.
+   Regions of instability in the $(\rho,e)$-plane are described
+   and related to the underlying microphysical processes.
+   %}        %% uncomment if structured abstract is selected
+ %% results heading (mandatory)
+   %{        %% uncomment if structured abstract is selected
+   Vibrational instability is found to be a common phenomenon
+   at temperatures lower than the second He ionisation
+   zone. The $\kappa$-mechanism is widespread under `cool'
+   conditions.
+   %}        %% uncomment if structured abstract is selected
+ %% conclusions heading (optional), leave {} empty if necessary 
+   }        %% replace by pair of curly brackets, {}, if structured abstract is selected
+   
+
+   \keywords{giant planet formation --
+                $\kappa$-mechanism --
+                stability of gas spheres
+               }
+
+   \maketitle
+%%
+%%________________________________________________________________
+
+\section{Introduction}
+
+Understanding and predicting the behavior of the Earth's upper atmosphere remains a significant challenge. Over the course of the space age, a multitude of models have been developed to address the issue (lahteita?). 
+
+The first models developed in the 1960s and 70s described the mean state of the thermosphere by fitting analytical functions to observed temperatures and (partial) densities (lahde Emmert). This approach has turned out to be wildly successful, and these so-called semi-empirical models have seen numerous improvements through the use of new observations and model equations (). 
+
+In the 1980s, however, advances in computer performance and physical understanding of the thermosphere-ionosphere system led to the emergence of first-principles numerical models (lahteita TIGCM, CTIM). In contrast to the semi-empirical descriptions, they had the ability to model the dynamically varying state of the upper atmosphere, and could provide further physical insight into its behavior. Nevertheless, despite significant advances (lahteita joihinkin uusimpiin), the physical models have not, in general, surpassed the semi-empirical models in accuracy at describing the state of the neutral upper atmosphere (lahteet). In order to give accurate predictions of the chaotic and strongly externally-driven system, the physical models require good descriptions of both the initial state of the ionosphere-thermosphere and the solar and geomagnetic forcings driving it. However, mainly due to the lack of (contemporaneous) observations, both requirements have remained elusive (lahde). 
+
+As the semi-empirical models do not require initialization, use relatively simple description of the forcings, are computationally efficient and accurate, they have retained their revelance in atmospheric research to this day. Three series of semi-empirical models, Jacchia (lahde), DTM(lahde) and MSIS (lahde) are considered to be the most comprehensive and are widely used by the community (lahde). MSIS models were initially developed using temperature and density measurements from incoherent scatter radars, rockets, solar UV occultation and satellite-borne mass spectrometers (lahde). However, prior to the latest version, NRLMSISE-00 (lahde), the model did not include any total mass density measurements from orbit determination or satellite accelerometers.
+
+In the 2000s, accelerometer measurements from Gravity field and steady-state Ocean Circulation Explorer (GOCE) (lahde), Gravity Recovery and Climate Experiment (GRACE), Challenging Minisatellite Payload (CHAMP) and Swarm (lahde) satellites have vastly increased the amount of data available on the neutral upper atmosphere. The MSIS model has not been updated to include these data, but parts of the data have been incorporated in the latest Jacchia and DTM series models, JB2008 (lahde) and DTM-2013 (lahde). This has enabled both models to surpass NRLMSISE-00 in the accuracy of mass density predictions. 
+
+The accuracy of the NRLMSISE-00 model has been shown to decrease during geomagnetically perturbed times (lahde). Modeling of storm effects was made difficult by the relative sparsness of the data available during storm times, especialy at high latitudes (lahde). However, the accelerometer derived densities have since partly reduced the issue, spurring new research into storm effects on the thermosphere. (Lahde Burke) analyzed measurements from the GRACE satellite and concluded that the storm-time thermosphere can be modeled as a driven-dissipative thermodynamic system, the driver of which is the magnetospheric elecric field. They showed that the governing equation has the same form for both the exospheric temperature and Dst index changes, which makes it possible to eliminate the electric field and couple the time evolution of the thermosphere directly to the Dst index. This parameterization was employed in the JB2008 model, leading to increased precision over NRLMSISE-00 and previous Jacchia models (lahde). 
+
+The accelerometer data have also provided insight into the spatial variations of the disturbance-time response. Specifically, several discrepancies at high latitudes have been revealed, owing to the high-inclination of the satellites. Using CHAMP measurements, (LAHDE Luhr, 2004) discovered a density maximum in the cusp region and (LAHDE Liu 2005) demonstrated that its amplitude increases with increasing geomagnetic forcing. (LAHDE Liu 2005) also discovered that mass density in the premidnight auroral region is proportional to geomagnetic activity as well, with enhancements extending to lower latitudes in more active times. 
+
+(LAHDE) show that there is no clear distinction between the auroral and polar cap regions in the mass density response induced by geomagnetic storms, but significant enhancements are also observed at high latitudes. (LAHDE Yanshi Huang) compared Poynting flux measurements to the TIE-GCM and showed that the model underestimated the energy input into the polar cap, leading to an incorrect prediction of the thermospheric response. (LAHDE C.Y. Huang) analyze CHAMP and GRACE measurements and show that the density maxima occur most often in the cusp and mantle regions, which would not indicate a source in the auroral zone. However, (LAHDE G. LU) point out that the regions of maxima in density and energy deposition need not be spatially correlated. In the study, most of the energy is shown to be dissipated in the auroral zone, leading the thermosphere to redistribute the density and temperature perturbations to polar regions via upwelling and gravity waves. 
+
+Recently, (LAHDE Yamazaki (2015)) created an empirical model of the high-latitude mass density response to solar wind forcing using CHAMP and GRACE data. The model, High-Latitude Atmospheric Neutral DensitY (HANDY), provides a sythesis of the observations at an altitude of 450 km, confirming that maximum enhancements are observed in the magnetic premidnight and noon sectors with relatively weak response in the predawn sector. Using solar wind electric field $E_{SW}$, dynamic pressure $P_{SW}$ and interplanetary magnetic field (IMF) clock angle as inputs, the model also describes the hemispheric asymmetry caused by changes in IMF $B_{y}$ (LAHTEITA ALKUPERAISTUTKIMUKSIIN). 
+
+However, although HANDY is shown to be more accurate than the NRLMSISE-00 and JB2008 models (LAHDE Yamazaki (2015)), its practical value is limited by its construction on the single, fixed altitude surface. At constant altitude, the total mass density is affected by both changes in the neutral temperature and in the number densities of constituent species (primarily O, $\mathrm{N_{2}}$, $\mathrm{O_{2}}$, He and H, depending on the height and geophysical conditions) (LAHDE esim. EMMERT tai Prolls). Acting together, the temperature and composition changes create a complicated altitude dependence on the total mass density response (e.g. LAHDE Liu (2014)). A fully three-dimensional description of the geomagnetic response is thus difficult to obtain solely based on the accelerometer measurements.
+
+Hence, in this work, we present a new semi-empirical model of the upper atmosphere constructed by combining the total mass density data to temperature and composition measurements by mass spectrometers, incoherent scatter radars and ultraviolet imagers. The new model, which we call Iipponen-Laitinen 2017 (IL2017) after the authors, bears a close resemblance to NRLMSISE-00. However, the construction of a new model enables to incorporate parts of the knowledge the community has since gained in the form of new model equations. It also enables us to utilize the latest data; most notably the Thermosphere Ionosphere Mesosphere Energetics and Dynamics (TIMED) satellite observations (LAHDE) and the accurate accelerometer measurements derived by LAHDE Mehta (2017). 
+
+Most of the IL2017 model development was centered around a new geomagnetic parameterization. As in the other semi-empirical models, the parameterization relies on a proxy to describe the amplitude of the disturbance. (LAHDE) Guo (2010) analyzed correlations between CHAMP density measurements and various solar and geomagnetic parameters. They discovered that although the Borovsky parameter best correlates with observed variations on a global scale, the geomagnetic indices AE and Kp perform almost as well. LAHDE Krauss (2015) perform a similar analysis using GRACE data, but they conclude that for the geomagnetic indices, the highest correlations are obtained for Dst and SYM-H, while AE and Kp correlate more weakly due to their nonlinear relation to density enhancements. LAHDE Chen (2014) find that the correlation between density enhancements and the AE index integrated over the duration of a storm is comparable to that between density and total hemispheric auroral energy for coronal mass ejection driven storms, but slightly lower for corotating interaction driven storms. In a previous study (Lahde Iipponen ja Laitinen (2015)), 
+
+\section{Baker's standard one-zone model}
+
+
+
+\section{Conclusions}
+
+
+
+\begin{acknowledgements}
+
+\end{acknowledgements}
+
+%%    This version assumes use of bibtex with the swsc.bib file being present
+%%    If your bib file has a different name you need to change the following line
+
+\bibliography{swsc}
+
+\end{linenumbers}
+
+\end{document}
+
+\end{linenumbers}
+
+\end{document}
+\textsl{\textsl{•}}
+
