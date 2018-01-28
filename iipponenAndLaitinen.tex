@@ -61,6 +61,7 @@
 %%  with structured abstract 
 %\documentclass[referee,a4paper,12pt,structabstract]{swsc} 
 
+\usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{txfonts}
 \usepackage{subfigure}
@@ -69,6 +70,7 @@
 \usepackage[authoryear,round]{natbib}
 \usepackage[backref]{hyperref}
 \usepackage{url}
+
 
 %%    This version assumes using bibtex with the swsc bibliography style file
 \bibliographystyle{swsc}
@@ -182,13 +184,147 @@ Hence, in this work, we present a new semi-empirical model of the upper atmosphe
 
 Most of the IL2017 model development was centered around a new geomagnetic parameterization. As in the other semi-empirical models, the parameterization relies on a proxy to describe the amplitude of the disturbance. (LAHDE) Guo (2010) analyzed correlations between CHAMP density measurements and various solar and geomagnetic parameters. They discovered that although the Borovsky parameter best correlates with observed variations on a global scale, the geomagnetic indices AE and Kp perform almost as well. LAHDE Krauss (2015) perform a similar analysis using GRACE data, but they conclude that for the geomagnetic indices, the highest correlations are obtained for Dst and SYM-H, while AE and Kp correlate more weakly due to their nonlinear relation to density enhancements. LAHDE Chen (2014) find that the correlation between density enhancements and the AE index integrated over the duration of a storm is comparable to that between density and total hemispheric auroral energy for coronal mass ejection driven storms, but slightly lower for corotating interaction driven storms. In a previous study (Lahde Iipponen ja Laitinen (2015)), we carried out a correlation analysis similar to LAHDE Guo (2010) and Krauss (2015), but for GOCE data. We found no significant difference between the correlations of AE and $\mathrm{a_{p}}$ with the density variations, although the correlation of AE significantly increased with the magnitude of the disturbance. 
 
-(LAHDE) Iipponen ja Laitinen (2015) also found that summation of the AE and $\mathrm{a_{p}}$ indices over preceding 21 and 24 hours, respectively, significantly increased the correlation with orbit-averaged density enhancements. This result was expected, since the thermospheric densities are proportional to the total energy deposited there by the geomagnetic activity and do not immediately recover after the heating returns to its quiet-time level. However, a 
+(LAHDE) Iipponen ja Laitinen (2015) also found that summation of the AE and $\mathrm{a_{p}}$ indices over preceding 21 and 24 hours, respectively, significantly increased the correlation with orbit-averaged density enhancements. This result was expected, since the thermospheric densities are proportional to the total energy deposited there by the geomagnetic activity and do not immediately recover after the heating returns to its quiet-time level. A similar integration procedure has been employed before (lahteita), but instead of direct summation (as in Iipponen ja Laitinen (2015)), an index has been weighed by an exponential function, with past values receiving less weight than the more recent ones. Specifically, this method has been used in the MSIS-series of models since MSIS-83 (LAHDE) in conjunction with the $\mathrm{a_{p}}$ index. The geomagnetic proxy used in the IL2017 model is very similar to that of (LAHDE) Nishbet (1983), who find a good agreement between an exponentially weighed AL index and storm-time atomic oxygen density depletions. We decided to employ the AE index, since it responds to ionospheric Hall currents. As the majority of heating is caused by the Pedersen currents, the Hall currents are assumed to be more closely related to thermospheric variations than the currents associated with the $\mathrm{a_{p}}$ index (LAHDE Nishbet (1983)). The AE index, in contrast to the solar wind measurements, is also continuously available since the 1970s up to present day, covering all the data used in the construction of the model. 
+
+We compare the new model to observations, and show it to be more accurate and more unbiased than the NRLMISE-00 and DTM-2013 models. Complete source code and model coefficients are made available for the benefit of the scientific and operational communities.
 
 
 
-\section{Baker's standard one-zone model}
+\section{IL-2017 model}
 
+\subsection{The algorithm}
 
+The IL-2017 model describes the mean-state of upper-atmospheric neutral composition and temperature as a function of geophysical conditions. Like the DTM models (e.g. LAHDE), IL-2017 assumes diffusive (or gravitational) equilibrium throughout the thermosphere. By this assumption, the distributions of the constitutents (O, $\mathrm{N_{2}}$, He and $\mathrm{O_{2}}$) are independent, and their three-dimensional variation can be fully described by integrating the equation of diffusive equilibrium from the lower boundary to a specific altitude. This yields \textit{[En osannut p\"a\"att\"a\"a, ladonko n\"am\"a t\"ah\"an, vaiko liitteeksi - DTM-papareissa yht\"al\"ot on leip\"atekstiss\"a, mutta MSIS-papereissa liittein\"a}:
+\begin{equation}
+\rho_i(z) = \rho_i(z_0) (T_0 / T(z))^{1+\alpha+\gamma_i}e^{-\sigma \gamma_i \zeta},
+\end{equation}
+where 
+\begin{itemize}
+\item $T(z) = T_{ex} - (T_{ex} - T_0) e^{-\sigma \zeta}$ accoding to LAHDE Bates,
+\item $T_0$: temperature at the lower boundary (130 km),
+\item $T_{ex}$: exospheric temperature,
+\item $z$: geometric altitude,
+\item $\sigma = T_0'/(T_{ex} - T_0)$: normalized temperature gradient,
+\item $T_0'$: temperature gradient at the lower boundary,
+\item $\gamma = m_i g_0 / (\sigma k T_{ex})$,
+\item $m_i$: molecular mass of species $i$,
+\item $g_0 = 9.418 \mathrm{N/kg}$: gravitational acceleration at the lower boundary,
+\item $k = 1.3806 \cdot 10^{-23} \mathrm{J/K}$: Boltzmann constant,
+\item $\alpha$: coefficient of thermal diffusion (-0.38 for helium, 0 for other species)
+\item $zeta = (R_E + z_0)(z - z_0)/(R_E + z)$: geopotential height with respect to the lower boundary,
+\item $R_E = 6356.77 \mathrm{km}$: polar radius of the Earth,
+\item $z_0 = 130 km$: geometric altitude of the lower boundary.
+\end{itemize}
+Altitude of the lower boundary is at 130 km (10 km higher than in the DTM models (LAHDE)), because based on our analysis of TIMED SABER and NRLMSISE-00 temperatures, this is the approximate altitude above which the temperature profile can be well approximated by an exponential function (not shown).
+
+The lower boundary densities and temperatures, and the exospheric temperature are all defined on the surface of a sphere. Thus, very much akin to MSIS and DTM models, spherical harmonic functions are employed to describe the spatial variations. Density of an individual species at the lower boundary is varied according to an empirical function G(L):
+\begin{equation}
+\rho_i(z_0) = m_in^0_i e^{G_i(L)},
+\end{equation}
+where $n_i^0$ is the average lower-boundary number density of a species. Similar relation is used to describe the temperatures:
+\begin{align}
+T_0 &= <T_0>(1+G_{T_0}(L)) \\
+T_{ex} &= <T_{ex}>(1+G_{T_{ex}}(L))\\
+T' &= <T'>(1+G_{T'}(L)),
+\end{align}
+where the angle brackets indicate a constant average value. 
+
+The empirical function G(L) shares strong similarity with the MSIS and DTM formluations for quiet time, but describes the geomagnetic effect in a novel way. The full G(L) function (used for exospheric temperature and major species O, $\mathrm{N_{2}}$ and He) is as follows:
+
+Latitude:
+\begin{align*}
+& l_1 P_{10} + l_2 P_{20} + l_3 P_{30} + l_4 P_{40} + l_5 P_{50} + l_6 P_{60} + \\
+& (l_7 P_{10} + l_8 P_{20} + l_9 P_{30} + l_{10} P_{40})~\overline{F} + \\
+& (l_{11} P_{10} + l_{12} P_{20} + l_{13} P_{30} + l_{14} P_{40})~F +
+\end{align*}
+
+Solar activity:
+\begin{align*}
+s_1 \Delta F + s_2 (\Delta F)^2 + s_3 \Delta \overline{F} + s_4 (\Delta \overline{F})^2 + s_5 \Delta F \Delta \overline{F} +
+\end{align*}
+
+Symmetric annual:
+\begin{align*}
+&(a^S_1 + a^S_2 P_{20} + a^S_3P_{40})\cos(\Omega t_y-\phi^S_1)(1+a^S_4\overline{F}+ a^S_5\overline{F}^2) +\\
+&(a^S_6 + a^S_7 P_{20})\cos(2(\Omega t_y-\phi^S_2))(1+a^S_8\overline{F}+ a^S_9\overline{F}^2) +\\
+&(a^S_{10} + a^S_{11} P_{20})\cos(3(\Omega t_y-\phi^S_3))(1+a^S_{12}\overline{F})+\\
+&a^S_{13}\cos(4(\Omega t_y-\phi^S_4))(1+a^S_{14}\overline{F})+
+\end{align*}
+
+Asymmetric annual:
+\begin{align*}
+&(a^A_1P_{10}+a^A_2P_{30}+a^A_3 P_{50})\cos(\Omega t_y-\phi^A_1)(1+a^A_4\overline{F}+a^A_5\overline{F}^2)+\\
+&(a^A_6P_{10}+a^A_7P_{30})\cos(2(\Omega t_y-\phi^A_2))(1+a^A_8\overline{F}+a^A_9\overline{F}^2) + \\
+&a^A_{10} P_{10}\cos(3(\Omega t_y-\phi^A_3))(1+a^A_{11}\overline{F})+
+\end{align*}
+
+Diurnal:
+\begin{align*}
+&[(d^D_1 P_{11}+d^D_2 P_{31}+d^D_3 P_{51}+d^D_4 P_{71} + d^D_5\Delta\overline{F} + d^D_6(\Delta\overline{F})^2 + d^D_7 \Delta F) + \\
+&(d^D_8 P_{11} + d^D_9 P_{21} + d^D_{10} P_{31})(\cos(\Omega t_y-\phi^D))]\cos(\omega t_d)+\\
+&[(d^D_{11} P_{11}+d^D_{12} P_{31}+d^D_{13} P_{51}+d^D_{14} P_{71} + d^D_{15}\Delta\overline{F} + d^D_{16}(\Delta\overline{F})^2 + d^D_{17} \Delta F) + \\
+&(d^D_{18} P_{11} + d^D_{19} P_{21} + d^D_{20} P_{31})(\cos(\Omega t_y-\phi^D))]\sin(\omega t_d)+
+\end{align*}
+
+Semidiurnal:
+\begin{align*}
+[d^S_1 P_{22} + d^S_2 P_{32} + d^S_3 P_{52} + d^S_4\Delta\overline{F} + d^S_5*\Delta\overline{F}^2 + d^S_6 \Delta F + (d^S_7 P_{32} + d^S_8 P_{52})\cos(\Omega t_y-\phi^S)]\cos(2\omega t_d) +\\
+[d^S_9 P_{22} + d^S_{10} P_{32} + d^S_{11} P_{52} + d^S_{12}\Delta\overline{F} + d^S_{13}*\Delta\overline{F}^2 + d^S_{14} \Delta F + (d^S_{15} P_{32} + d^S_{16} P_{52})\cos(\Omega t_y-\phi^S)]\sin(2\omega t_d)+
+\end{align*}
+
+Terdiurnal:
+\begin{align*}
+&(d^T_1P_{33} + d^T_2 P_{53} + (d^T_3 P_{43} + d^T_4P_{63})\cos(\Omega t_y-\phi^T))\cos(3\omega t_d)+\\
+&(d^T_5P_{33} + d^T_6 P_{53} + (d^T_7 P_{43} + d^T_8P_{63})\cos(\Omega t_y-\phi^T))\sin(3\omega t_d)+
+\end{align*}
+
+Quatra-diurnal:
+\begin{align*}
+d^Q_1 P_{44}\cos(4 \omega t_d) + d^Q_2 P_{44}\sin(4\omega t_d)+
+\end{align*}
+
+Longitude:
+\begin{align*}
+&(b_1 P_{21}+ b_2 P_{41}+ b_3 P_{61} +(b_4 P_{11}+b_5 P_{31})\cos(\Omega t_y-\phi^L))(1+b_6 \overline{F})\cos(\lambda) + \\
+&(b_7 P_{21}+ b_8 P_{41}+ b_9 P_{61} +(b_{10} P_{11}+b_{11} P_{31})\cos(\Omega t_y-\phi^L))(1+b_{12} \overline{F})\sin(\lambda) +
+\end{align*}
+
+Geomagnetic - zonal:
+\begin{align*}
+(g^Z_1+g^Z_2 P^m_{20}+g^Z_3 P^m_{40}+g^Z_4 P^m_{60} + (g^Z_5 P^m_{10}+g^Z_6 P^m_{30}+g^Z_7 P^m_{50})    \cos(\Omega t_y-\phi^G_y))(1+g^Z_9 F)\Delta AE +
+\end{align*}
+
+Geomagnetic - diurnal:
+\begin{align*}
+(g^D_1 P^m_{11}+g^D_2 P^m_{31}+g^D_3 P^m_{51} + (g^D_4 P^m_{21}+g^D_5 P^m_{41}+g^D_6 P^m_{61})    \cos(\Omega t_y-\phi^G_y))(1+g^D_7 F)\cos(\omega t^m_d-\phi^G_D)\Delta AE
+\end{align*}
+
+Geomagnetic - semidiurnal:
+\begin{align*}
+(g^S_1 P^m_{22}+g^S_2 P^m_{42}+g^S_3 P^m_{62} + (g^S_4 P^m_{32}+g^S_5 P^m_{52})\cos(\Omega t_y-\phi^G_y))(1+g^S_6 F)\cos(\omega t^m_d-\phi^G_S)\Delta AE
+\end{align*}
+
+Here:
+\begin{itemize}
+\item $l_i$, $s_i$, $a_i$, $d_i$, $g_i$ and $\phi_i$: constant coefficients, different for each species and temperatures,
+\item $F$ and $\overline{F}$: the solar 30-cm radio flux (F30) for previous day and its average over 81 days,
+\item $\Delta F = F - \overline{F}$,
+\item $\Delta \overline{F} = \overline{F} - 80$,
+\item $\Omega = 2\pi / 365 \mathrm{[day^{-1}]}$,
+\item $\omega = 2\pi / 24 \mathrm{[h^{-1}]}$,
+\item $t_y$: day of year,
+\item $t_d$: local solar time [h],
+\item $\lambda$: geographic longitude,
+\item $P_{nm}(x) = \frac{(-1)^m}{2^n n!} (1-x^2)^{m/2} \frac{d^{n+m}}{d x^{n+m}} (x^2 - 1)^n$: the associated Legendre functions,
+\item $x = \sin(\theta)$,
+\item $\theta$: geographic latitude,
+\item $P^m_{nm}$: associated Legendre functions computed using geomagnetic latitude,
+\item $t^m_d$: magnetic local time [h],
+\item $\Delta AE (t) = \frac{1}{\tau} \int_{-\infty}^{t} AE(t') e^{-(t-t')/\tau}dt'$: the geomagnetic proxy after (LAHDE) Nishbet.
+\end{itemize}
+ 
+
+The 30-cm solar radio flux is used to characterize the UV forcing, since it better correlates with longer UV-wavelengths, and significantly improves the density modeling (LAHDE Bruinsma 2017). 
 
 \section{Conclusions}
 
