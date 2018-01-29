@@ -194,7 +194,7 @@ We compare the new model to observations, and show it to be more accurate and mo
 
 \subsection{The algorithm}
 
-The IL-2017 model describes the mean-state of upper-atmospheric neutral composition and temperature as a function of geophysical conditions. Like the DTM models (e.g. LAHDE), IL-2017 assumes diffusive (or gravitational) equilibrium throughout the thermosphere. By this assumption, the distributions of the constitutents (O, $\mathrm{N_{2}}$, He and $\mathrm{O_{2}}$) are independent, and their three-dimensional variation can be fully described by integrating the equation of diffusive equilibrium from the lower boundary to a specific altitude. This yields \textit{[En osannut p\"a\"att\"a\"a, ladonko n\"am\"a t\"ah\"an, vaiko liitteeksi - DTM-papareissa yht\"al\"ot on leip\"atekstiss\"a, mutta MSIS-papereissa liittein\"a}:
+The IL-2017 model describes the mean-state of upper-atmospheric neutral composition and temperature as a function of geophysical conditions. Like the DTM models (e.g. LAHDE), IL-2017 assumes diffusive (or gravitational) equilibrium throughout the thermosphere. By this assumption, the distributions of the constitutents (O, $\mathrm{N_{2}}$, He and $\mathrm{O_{2}}$) are independent, and their three-dimensional variation can be fully described by integrating the equation of diffusive equilibrium from the lower boundary to a specific altitude. This yields:
 \begin{equation}
 \rho_i(z) = \rho_i(z_0) (T_0 / T(z))^{1+\alpha+\gamma_i}e^{-\sigma \gamma_i \zeta},
 \end{equation}
@@ -229,7 +229,61 @@ T' &= <T'>(1+G_{T'}(L)),
 \end{align}
 where the angle brackets indicate a constant average value. 
 
-The empirical function G(L) shares strong similarity with the MSIS and DTM formluations for quiet time, but describes the geomagnetic effect in a novel way. The full G(L) function (used for exospheric temperature and major species O, $\mathrm{N_{2}}$ and He) is as follows:
+The empirical function G(L) shares strong similarity with the MSIS and DTM formluations for quiet time, but describes the geomagnetic effect in a novel way. The geomagnetic parameterization part of the G(L) function (used for exospheric temperature and major species O, $\mathrm{N_{2}}$ and He) is as follows:
+
+Geomagnetic - zonal:
+\begin{align*}
+(g^Z_1+g^Z_2 P^m_{20}+g^Z_3 P^m_{40}+g^Z_4 P^m_{60} + (g^Z_5 P^m_{10}+g^Z_6 P^m_{30}+g^Z_7 P^m_{50})    \cos(\Omega t_y-\phi^G_y))(1+g^Z_9 F)\Delta AE +
+\end{align*}
+
+Geomagnetic - diurnal:
+\begin{align*}
+(g^D_1 P^m_{11}+g^D_2 P^m_{31}+g^D_3 P^m_{51} + (g^D_4 P^m_{21}+g^D_5 P^m_{41}+g^D_6 P^m_{61})    \cos(\Omega t_y-\phi^G_y))(1+g^D_7 F)\cos(\omega t^m_d-\phi^G_D)\Delta AE
+\end{align*}
+
+Geomagnetic - semidiurnal:
+\begin{align*}
+(g^S_1 P^m_{22}+g^S_2 P^m_{42}+g^S_3 P^m_{62} + (g^S_4 P^m_{32}+g^S_5 P^m_{52})\cos(\Omega t_y-\phi^G_y))(1+g^S_6 F)\cos(2(\omega t^m_d-\phi^G_S))\Delta AE
+\end{align*}
+
+Here:
+\begin{itemize}
+\item $g_i$ and $\phi^G$: constant coefficients, different for each species and temperatures,
+\item $F$: the solar 30-cm radio flux (F30) for previous day,
+\item $\Omega = 2\pi / 365 \mathrm{[day^{-1}]}$,
+\item $\omega = 2\pi / 24 \mathrm{[h^{-1}]}$,
+\item $t_y$: day of year,
+\item $P^m_{nm}(x) = \frac{(-1)^m}{2^n n!} (1-x^2)^{m/2} \frac{d^{n+m}}{d x^{n+m}} (x^2 - 1)^n$: the associated Legendre functions in geomagnetic coordinates,
+\item $x = \sin(\theta^m)$,
+\item $\theta^m$: geomagnetic latitude,
+\item $t^m_d$: magnetic local time [h],
+\item $\Delta AE (t) = \frac{1}{\tau_i} \int_{-\infty}^{t} AE(t') e^{-(t-t')/\tau_i}dt'$: the geomagnetic proxy after (LAHDE) Nishbet (but using AE instead of AL). e-fold time $\tau_i$ is different for each species and exospheric temperature.
+\end{itemize}
+
+The geomagnetic response is modeled in magnetic coordinates up to degree 6 and order 2. Use of the geomagnetic coordinates is in contrast with the MSIS model, which uses the geographic coordinates for all its parameterizations (LAHDE). Due to the displacement of Earth's geomagnetic and geographic poles, use of geographic coordinates would introduce a noticable longitudinal dependence on the response, much of which is eliminated by the use of geomagnetic coordinate system (LAHDE) PROLLS. The order was limited to two (semidiurnal), since this is sufficient to describe the maxima observed in the magnetic noon and premidnight sectors, and the minimum near dawn. Use of a terdiurnal component as in LAHDE Yamazaki (2015b) was attempted, but it was discovered to fit observational noise rather than the signal. 
+
+The seasonal response is assumed to have only a symmetrical annual component. This mostly arises due to summer-to-winter wind circulation, which advects the perturbations to lower latitudes in the summer hemisphere (LAHDE) Prolls and von Zhan (1977). Variations in the upper-atmospheric neutral circulation also occur over the solar cycle, following changes in UV radiation (lahde). Model results by (LAHDE) Burns (2004) indicate that changes in pressure gradients driven by solar EUV lead to a wind circulation that is relatively more strongly controlled by Joule Heating during solar minimum than during solar maximum. Therefore, stronger equatorward winds are expected during solar minimum times, which may lead to expansion of the composition and temperature perturbations to lower latitudes. MILLE NAMA OVAT TILASTOLLISESTI MERKITSEVIA? The 30-cm solar radio flux is used to characterize the UV forcing, since it better correlates with longer UV wavelengths, and significantly improves the density modeling (LAHDE Bruinsma 2017). 
+
+We initially attempted to construct the model by using a linear sum of AE, in which all AE observations over a specified historical window were given equal value in determining the current value of thermospheric density (cf. (LAHDE IIPPONEN ja LAITINEN). However, the longer the time has passed after a disturbance, the closer the thermosphere is to its relaxed state. Thus, a recent disturbance more closely predicts the current state of the thermosphere than a distant one. So instead of a direct summation, we decided to weight the AE observations by an exponential funtion, similar to the approach employed with the ap index in later versions of the MSIS model (lahteita). 
+
+Note that the value of $\Delta AE$ is global in nature, and does not depend on latitude as in NRLMSISE-00 (lahde). MSIS models display a difference in the e-folding time $t_i$ for helium and exospheric temperature between the low and high latitudes. However, we attempted to fit a model with latitude dependence in $t_i$ similar to that in MSIS, but found no statistically significant (p=?) changes in relaxation time with respect to magnetic latitude (not shown). This is in line with studies by Sheng (2017) LAHDE and LAHDE Lei (2011), who found no consistent latitudinal dependence in the storm-time recovery of GRACE and CHAMP densities. In addition to considering the e-folding times constant, we also ignore any lag between the low and high-latitude response. We consider that including a spatially varying lag-time to $\Delta AE$ would, in principle, render the model too complicated to use in an operational setting \textit{[Lis\"aksi viipeen sovittaminen yhdess\"a muiden parametrien kanssa olisi ollut laskennallisesti eritt\"ain raskasta saavutettuun hy\"otyyn n\"ahden.]}.
+
+
+
+
+
+\section{Conclusions}
+
+
+
+
+
+\begin{acknowledgements}
+
+\end{acknowledgements}
+
+\appendix
+\section{Model formulation}
 
 Latitude:
 \begin{align*}
@@ -289,50 +343,15 @@ Longitude:
 &(b_7 P_{21}+ b_8 P_{41}+ b_9 P_{61} +(b_{10} P_{11}+b_{11} P_{31})\cos(\Omega t_y-\phi^L))(1+b_{12} \overline{F})\sin(\lambda) +
 \end{align*}
 
-Geomagnetic - zonal:
-\begin{align*}
-(g^Z_1+g^Z_2 P^m_{20}+g^Z_3 P^m_{40}+g^Z_4 P^m_{60} + (g^Z_5 P^m_{10}+g^Z_6 P^m_{30}+g^Z_7 P^m_{50})    \cos(\Omega t_y-\phi^G_y))(1+g^Z_9 F)\Delta AE +
-\end{align*}
-
-Geomagnetic - diurnal:
-\begin{align*}
-(g^D_1 P^m_{11}+g^D_2 P^m_{31}+g^D_3 P^m_{51} + (g^D_4 P^m_{21}+g^D_5 P^m_{41}+g^D_6 P^m_{61})    \cos(\Omega t_y-\phi^G_y))(1+g^D_7 F)\cos(\omega t^m_d-\phi^G_D)\Delta AE
-\end{align*}
-
-Geomagnetic - semidiurnal:
-\begin{align*}
-(g^S_1 P^m_{22}+g^S_2 P^m_{42}+g^S_3 P^m_{62} + (g^S_4 P^m_{32}+g^S_5 P^m_{52})\cos(\Omega t_y-\phi^G_y))(1+g^S_6 F)\cos(\omega t^m_d-\phi^G_S)\Delta AE
-\end{align*}
-
-Here:
 \begin{itemize}
-\item $l_i$, $s_i$, $a_i$, $d_i$, $g_i$ and $\phi_i$: constant coefficients, different for each species and temperatures,
-\item $F$ and $\overline{F}$: the solar 30-cm radio flux (F30) for previous day and its average over 81 days,
+\item $l_i$, $s_i$, $a_i$, $d_i$ and $\phi_i$: constant coefficients, different for each species and temperatures,
+\item $\overline{F}$: average 30-cm solar radio flux over 81 days,
 \item $\Delta F = F - \overline{F}$,
 \item $\Delta \overline{F} = \overline{F} - 80$,
-\item $\Omega = 2\pi / 365 \mathrm{[day^{-1}]}$,
-\item $\omega = 2\pi / 24 \mathrm{[h^{-1}]}$,
-\item $t_y$: day of year,
 \item $t_d$: local solar time [h],
 \item $\lambda$: geographic longitude,
-\item $P_{nm}(x) = \frac{(-1)^m}{2^n n!} (1-x^2)^{m/2} \frac{d^{n+m}}{d x^{n+m}} (x^2 - 1)^n$: the associated Legendre functions,
-\item $x = \sin(\theta)$,
-\item $\theta$: geographic latitude,
-\item $P^m_{nm}$: associated Legendre functions computed using geomagnetic latitude,
-\item $t^m_d$: magnetic local time [h],
-\item $\Delta AE (t) = \frac{1}{\tau} \int_{-\infty}^{t} AE(t') e^{-(t-t')/\tau}dt'$: the geomagnetic proxy after (LAHDE) Nishbet.
+\item $P_{nm}(x) = \frac{(-1)^m}{2^n n!} (1-x^2)^{m/2} \frac{d^{n+m}}{d x^{n+m}} (x^2 - 1)^n$: the associated Legendre functions in geographic coordinates,
 \end{itemize}
- 
-
-The 30-cm solar radio flux is used to characterize the UV forcing, since it better correlates with longer UV-wavelengths, and significantly improves the density modeling (LAHDE Bruinsma 2017). 
-
-\section{Conclusions}
-
-
-
-\begin{acknowledgements}
-
-\end{acknowledgements}
 
 %%    This version assumes use of bibtex with the swsc.bib file being present
 %%    If your bib file has a different name you need to change the following line
